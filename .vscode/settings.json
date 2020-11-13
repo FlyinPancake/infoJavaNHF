@@ -1,0 +1,18 @@
+{
+    "cmake.configureOnOpen": false,
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\flyinpancake\\scoop\\apps\\gradle\\current\\lib\\plugins\\hamcrest-core-1.3.jar",
+        "c:\\Users\\flyinpancake\\scoop\\apps\\gradle\\current\\lib\\plugins\\junit-4.13.jar"
+    ],
+    "spellright.language": [
+        "en",
+        "hu"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext",
+        "java"
+    ]
+}
