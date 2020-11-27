@@ -23,6 +23,9 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:29.0-jre")
+
+    //Json handling by gson
+    implementation("com.google.code.gson:gson:2.8.5")
 }
 
 application {
@@ -38,4 +41,9 @@ tasks.jacocoTestReport {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(14))
+    }
+}
 
