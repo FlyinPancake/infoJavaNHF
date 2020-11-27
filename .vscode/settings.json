@@ -20,5 +20,15 @@
         "**/.project": true,
         "**/.settings": true,
         "**/.factorypath": true
+    },
+    "gradle.javaDebug": {
+        "tasks": [
+            "app:run",
+            "app:test",
+            "app:compileJava",
+            "intTest",
+            "integration"
+        ],
+        "clean": false
     }
 }
