@@ -3,7 +3,8 @@
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
         "c:\\Users\\flyinpancake\\scoop\\apps\\gradle\\current\\lib\\plugins\\hamcrest-core-1.3.jar",
-        "c:\\Users\\flyinpancake\\scoop\\apps\\gradle\\current\\lib\\plugins\\junit-4.13.jar"
+        "c:\\Users\\flyinpancake\\scoop\\apps\\gradle\\current\\lib\\plugins\\junit-4.13.jar",
+        "c:\\Users\\flyinpancake\\scoop\\apps\\gradle\\current\\lib\\plugins\\gson-2.8.5.jar"
     ],
     "spellright.language": [
         "en",
@@ -12,8 +13,7 @@
     "spellright.documentTypes": [
         "markdown",
         "latex",
-        "plaintext",
-        "java"
+        "plaintext"
     ],
     "files.exclude": {
         "**/.classpath": true,
