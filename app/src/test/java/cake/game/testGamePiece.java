@@ -1,6 +1,5 @@
 package cake.game;
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +36,7 @@ public class testGamePiece {
             assertEquals(gp.GetY(i), norota[i][1]);
         }
 
-        gp = gp.rotate();
+        gp = gp.rotateLeft();
         int[][] one = new int[][] {{0,1}, {0,0}, {0,-1}, {0,-2}};
         for (int i = 0; i < norota.length; i++) {
             assertEquals(gp.GetX(i), one[i][0]); 
@@ -65,7 +64,7 @@ public class testGamePiece {
         }
 
         for (int i = 0; i < 4; i++) {
-            gp = gp.rotate();
+            gp = gp.rotateLeft();
         }
         
         for (int i = 0; i < norota.length; i++) {
