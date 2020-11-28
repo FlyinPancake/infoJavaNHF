@@ -19,17 +19,18 @@ public class TetrisScreen extends JPanel {
     private HashMap<GamePiece.Tetromino, Color> colorDict;
     protected TetrisBoard myTb;
     protected GamePiece piece;
+    // private PieceShower hold;
+    // private PieceShower next;
 
-    public TetrisScreen() {
+    public TetrisScreen(PieceShower next, PieceShower hold) {
         initBoard();
+        myTb = new TetrisBoard(next, hold);
     }
 
     private void initBoard() {
         addKeyListener(new TetrisKeyListener());
         piece = new GamePiece();
-        piece.setShape(Tetromino.JShape);
         colorDict = ReadColorDict();
-        myTb = new TetrisBoard();
     }
 
     private HashMap<Tetromino, Color> ReadColorDict() {

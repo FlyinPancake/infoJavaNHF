@@ -10,7 +10,10 @@ public class TetrisBoard {
     private final int TETRIS_WIDTH = 10;
     private final int TETRIS_HEIGHT = 22;
 
+    private GamePiece holdGamePiece;
     private PieceShower hold;
+
+    private GamePiece nextGamePiece; 
     private PieceShower next;
 
     private GamePiece currentPiece;
@@ -18,9 +21,8 @@ public class TetrisBoard {
     private int currentY;
     private GamePiece.Tetromino[][] gameBoard;
     private int score;
-    private Random random;
 
-    public TetrisBoard(PieceShower holdPiece, PieceShower nextPiece) {
+    public TetrisBoard(PieceShower nextPiece, PieceShower holdPiece) {
         gameBoard = new GamePiece.Tetromino[TETRIS_WIDTH][TETRIS_HEIGHT];
         InitGameBoard();
         score =0;
@@ -34,8 +36,7 @@ public class TetrisBoard {
                 gameBoard[ii][jj] = Tetromino.NoShape;
             }
         }
-        random = new Random();
-        NewPiece();
+        // NewPiece();
     }
 
     public GamePiece.Tetromino shapeAt(int x, int y) {
@@ -153,14 +154,21 @@ public class TetrisBoard {
         return false;
     }
 
+    public void NewPiece() {
+        if (nextGamePiece == null) {
+            nextGamePiece = new GamePiece();
+            nextGamePiece.randomizeShape();
+        }
+        GamePiece gPiece = nextGamePiece;
+        StartPiece(gPiece);
+        nextGamePiece.randomizeShape();
+        next.setPiece(nextGamePiece);
+    }
 
-    
-    public void NewPiece(){
-        currentPiece = new GamePiece();
-        currentPiece.randomizeShape();
+    public void StartPiece(GamePiece gPiece){
+        currentPiece = gPiece;
         currentY = TETRIS_HEIGHT - 1;
         currentX = TETRIS_WIDTH/2 - 1;
-
     }
 
     /**

@@ -17,15 +17,15 @@ public class PieceShower extends JPanel{
 
     public PieceShower(int squareSize) { 
         this.squareSize = squareSize;
+        ReadColorDict();
+        currentPiece = new GamePiece();
+        currentPiece.setShape(Tetromino.NoShape);
     }
 
     public PieceShower() {
         squareSize = 20;
-        currentPiece = new GamePiece();
-        currentPiece.randomizeShape();
-        ReadColorDict();
-        repaint();
-	}
+        
+    }
 
 	@Override
     protected void paintComponent(Graphics g) {
@@ -86,7 +86,7 @@ public class PieceShower extends JPanel{
         }
     }
 
-    private void setPiece(GamePiece gp) {
+    public void setPiece(GamePiece gp) {
         currentPiece = gp;
         repaint();
     }

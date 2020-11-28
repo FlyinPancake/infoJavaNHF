@@ -6,3 +6,5 @@ spec.pdf
 
 # Ignore Gradle build output directory
 build
+app/shapes.json
+*.vsdx
