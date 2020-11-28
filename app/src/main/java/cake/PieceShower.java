@@ -15,16 +15,11 @@ public class PieceShower extends JPanel{
     private int squareSize;
     private HashMap<Tetromino, Color> colorDict;
 
-    public PieceShower(int squareSize) { 
-        this.squareSize = squareSize;
+    public PieceShower() {
+        this.squareSize = 20;
         ReadColorDict();
         currentPiece = new GamePiece();
         currentPiece.setShape(Tetromino.NoShape);
-    }
-
-    public PieceShower() {
-        squareSize = 20;
-        
     }
 
 	@Override

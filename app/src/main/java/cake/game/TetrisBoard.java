@@ -1,7 +1,6 @@
 package cake.game;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import cake.PieceShower;
 import cake.game.GamePiece.Tetromino;
@@ -19,8 +18,11 @@ public class TetrisBoard {
     private GamePiece currentPiece;
     private int currentX;
     private int currentY;
+
     private GamePiece.Tetromino[][] gameBoard;
+
     private int score;
+
 
     public TetrisBoard(PieceShower nextPiece, PieceShower holdPiece) {
         gameBoard = new GamePiece.Tetromino[TETRIS_WIDTH][TETRIS_HEIGHT];
@@ -161,6 +163,7 @@ public class TetrisBoard {
         }
         GamePiece gPiece = nextGamePiece;
         StartPiece(gPiece);
+        nextGamePiece = new GamePiece();
         nextGamePiece.randomizeShape();
         next.setPiece(nextGamePiece);
     }

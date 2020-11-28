@@ -1,11 +1,12 @@
 package cake;
 
 import javax.swing.JPanel;
-
+import javax.swing.Timer;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.*;
+
 import java.util.HashMap;
 import java.awt.Color;
 import cake.game.GamePiece;
@@ -18,7 +19,10 @@ public class TetrisScreen extends JPanel {
     private final Color UNKNOWNSHAPECOLOR = Color.MAGENTA;
     private HashMap<GamePiece.Tetromino, Color> colorDict;
     protected TetrisBoard myTb;
+
     protected GamePiece piece;
+
+    private Timer gameTimer;
     // private PieceShower hold;
     // private PieceShower next;
 
@@ -64,7 +68,14 @@ public class TetrisScreen extends JPanel {
         PaintTetrisBoard((Graphics2D) g, myTb);
     }
 
-    
+    private void startGame() {
+        if (gameTimer != null) {
+            gameTimer.stop();
+        }
+        gameTimer = new Timer(200, new GameCycle());
+        myTb.NewPiece();
+        gameTimer.start();
+    }
 
     private Graphics2D TetrominoColorChanger(Graphics2D gtd, Tetromino t) {
         if (colorDict.containsKey(t)) {
@@ -103,6 +114,14 @@ public class TetrisScreen extends JPanel {
         }
     }
 
+    private class GameCycle implements ActionListener { 
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // TODO Auto-generated method stub
+            myTb.SoftDrop();
+            repaint();
+        }
+    }
     private class TetrisKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
@@ -128,7 +147,6 @@ public class TetrisScreen extends JPanel {
 
                 case KeyEvent.VK_N:
                     myTb.NewPiece();
-                    // System.out.println("New shape: " + myTb.getCurrentPiece().GetShape());
                     break;
 
                 case KeyEvent.VK_Q:
@@ -139,6 +157,10 @@ public class TetrisScreen extends JPanel {
                     myTb.RightRotatePiece();
                     break;
 
+                case KeyEvent.VK_S:
+                    startGame();
+                    break;
+                
                 default:
                     break;
             }
