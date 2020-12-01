@@ -1,4 +1,4 @@
-package cake;
+package cake.graphics;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -12,28 +12,38 @@ import java.awt.Color;
 import cake.game.GamePiece;
 import cake.game.TetrisBoard;
 import cake.game.GamePiece.Tetromino;
+import cake.menu.MainMenu;
+import cake.menu.PieceShower;
+import cake.menu.TetrisStatusbar;
 
+/**
+ * A Tetris játék kirajzolása és vezérlése
+ */
 public class TetrisScreen extends JPanel {
 
-    private final int BLOCK_SIZE = 20;
     private final Color UNKNOWNSHAPECOLOR = Color.MAGENTA;
     private HashMap<GamePiece.Tetromino, Color> colorDict;
     protected TetrisBoard myTb;
 
-    protected GamePiece piece;
-
     private Timer gameTimer;
-    // private PieceShower hold;
-    // private PieceShower next;
+    private final PieceShower hold;
+    private final PieceShower next;
+    private final TetrisStatusbar statusbar;
+    private MainMenu menu;
 
-    public TetrisScreen(PieceShower next, PieceShower hold) {
+    public TetrisScreen(PieceShower next, PieceShower hold, TetrisStatusbar statusbar) {
         initBoard();
-        myTb = new TetrisBoard(next, hold);
+        addKeyListener(new TetrisKeyListener());
+        this.hold = hold;
+        this.next = next;
+        this.statusbar = statusbar;
     }
 
+    /**
+     * Előkészíti a játékterületet.
+     */
     private void initBoard() {
-        addKeyListener(new TetrisKeyListener());
-        piece = new GamePiece();
+        myTb = new TetrisBoard(next, hold, this);
         colorDict = ReadColorDict();
     }
 
@@ -56,40 +66,92 @@ public class TetrisScreen extends JPanel {
     }
 
     @Override
-    public void addNotify() {
-        super.addNotify();
-        this.requestFocus();
-    }
-
-    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         PaintTetrisBoard((Graphics2D) g, myTb);
     }
 
-    private void startGame() {
+    /**
+     * Elindítja a játékot és kezel mindent ami ezzel kapcsolatos
+     */
+    public void startGame() {
         if (gameTimer != null) {
             gameTimer.stop();
         }
-        gameTimer = new Timer(200, new GameCycle());
+        initBoard();
+        gameTimer = new Timer(500, new GameCycle());
         myTb.NewPiece();
+        statusbar.setPlaying();
         gameTimer.start();
     }
 
-    private Graphics2D TetrominoColorChanger(Graphics2D gtd, Tetromino t) {
+    /**
+     * Szünetelteti a játékot
+     */
+    public void pauseGame() {
+        gameTimer.stop();
+        statusbar.setPaused();
+    }
+
+    /**
+     * Folytatja a szüneteltetett játékot.
+     */
+    public void resumeGame() {
+        gameTimer.restart();
+        statusbar.setPlaying();
+    }
+
+    /**
+     * Befejezi a játékot és elindítja a játék vége utáni feladatokat.
+     */
+    public void endGame() {
+        menu.clickStartStopButton();
+        statusbar.setEnded();
+        gameTimer.stop();
+        setHiScore(myTb.getScore());
+    }
+
+    /**
+     * Megszakítja a játékot és indítja a játék utáni feladatokat.
+     */
+    public void abortGame() {
+        gameTimer.stop();
+        statusbar.setEnded();
+        setHiScore(myTb.getScore());
+    }
+
+    /**
+     * Elküldi a pontszámot a toplistának
+     * @param score
+     */
+    private void setHiScore(int score) {
+        menu.getScoreBoard().addScore(score);
+    }
+
+    /**
+     * Megváltoztatja a Graphics2D tollszínét
+     * @param gtd
+     * @param t
+     */
+    private void TetrominoColorChanger(Graphics2D gtd, Tetromino t) {
         if (colorDict.containsKey(t)) {
             gtd.setColor(colorDict.get(t));
         } else {
             gtd.setColor(UNKNOWNSHAPECOLOR);
         }
 
-        return gtd;
     }
 
+    /**
+     * Kirajzolja a játékteret
+     * @param gtd
+     * @param tb
+     */
     private void PaintTetrisBoard(Graphics2D gtd, TetrisBoard tb) {
         // GFX options
         final int PADDING = 1; // In Pixels
+        int BLOCK_SIZE = 20;
         final int SQUARE_SIZE = BLOCK_SIZE; // In Pixels
 
         // gtd.setBackground(Color.BLACK);
@@ -114,27 +176,39 @@ public class TetrisScreen extends JPanel {
         }
     }
 
+    /**
+     * A gameTimer actionListenerje
+     */
     private class GameCycle implements ActionListener { 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO Auto-generated method stub
-            myTb.SoftDrop();
+            myTb.softDrop();
             repaint();
         }
     }
+
+    /**
+     * @return the gameTimer
+     */
+    public Timer getGameTimer() {
+        return gameTimer;
+    }
+
+    /**
+     * A játék bemeneteit olvassa be
+     */
     private class TetrisKeyListener extends KeyAdapter {
         @Override
-        public void keyPressed(KeyEvent e) {
-            int ketcode = e.getKeyCode();
+        public void keyReleased(KeyEvent e) {
+            int keyCode = e.getKeyCode();
 
-            switch (ketcode) {
+            switch (keyCode) {
                 case KeyEvent.VK_UP:
-                    // piece = piece.rotate();
                     myTb.HardDrop();
                     break;
 
                 case KeyEvent.VK_DOWN:
-                    myTb.SoftDrop();
+                    myTb.softDrop();
                     break;
 
                 case KeyEvent.VK_LEFT:
@@ -160,11 +234,30 @@ public class TetrisScreen extends JPanel {
                 case KeyEvent.VK_S:
                     startGame();
                     break;
-                
+
+                case KeyEvent.VK_SPACE:
+                    myTb.holdPiece();
+                    break;
+
                 default:
                     break;
             }
             repaint();
         }
+
+    }
+
+    /**
+     * @return the statusbar
+     */
+    public TetrisStatusbar getStatusbar() {
+        return statusbar;
+    }
+
+    /**
+     * @param menu
+     */
+    public void setMenu(MainMenu menu) {
+        this.menu = menu;
     }
 }

@@ -26,6 +26,9 @@ dependencies {
 
     //Json handling by gson
     implementation("com.google.code.gson:gson:2.8.5")
+
+    //Mockito for junit help
+    implementation("org.mockito:mockito-core:3.6.28")
 }
 
 application {

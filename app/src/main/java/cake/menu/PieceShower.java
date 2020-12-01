@@ -1,4 +1,4 @@
-package cake;
+package cake.menu;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,6 +10,9 @@ import javax.swing.JPanel;
 import cake.game.GamePiece;
 import cake.game.GamePiece.Tetromino;
 
+/**
+ * A következő és félretett elemeket mutatja meg
+ */
 public class PieceShower extends JPanel{
     private GamePiece currentPiece;
     private int squareSize;
@@ -29,7 +32,11 @@ public class PieceShower extends JPanel{
 
         drawPiece((Graphics2D) g);
     }
-    
+
+    /**
+     * Beolvassa / felveszi egy ArrayListbe a Tetromino-k színeit.
+     * @return HashMap, Tetromino kulccsal és Color értékkel
+     */
     private HashMap<Tetromino, Color> ReadColorDict() {
         colorDict = new HashMap<>();
         colorDict.put(Tetromino.NoShape, Color.WHITE);
@@ -48,15 +55,24 @@ public class PieceShower extends JPanel{
         return colorDict;
     }
 
-    private Graphics2D TetrominoColorChanger(Graphics2D gtd, Tetromino t) {
+    /**
+     * Megváltoztatja a toll színét, t-től függően
+     * @param gtd Graphics2D pointer
+     * @param t választott Tetromino
+     */
+    private void TetrominoColorChanger(Graphics2D gtd, Tetromino t) {
         if (colorDict.containsKey(t)) {
             gtd.setColor(colorDict.get(t));
         } else {
             gtd.setColor(Color.magenta);
         }
 
-        return gtd;
     }
+
+    /**
+     * Kirajzolja az elemet
+     * @param gtd
+     */
     private void drawPiece(Graphics2D gtd) {
         Tetromino[][] smallboard = new Tetromino[2][4];
         for (int yy= 0; yy< 2; yy++) {
@@ -73,16 +89,21 @@ public class PieceShower extends JPanel{
             for (int xx = 0; xx < 4; xx++) {
                 int startx = xx * (squareSize + 1);
                 int starty = yy * (squareSize + 1);
-                TetrominoColorChanger(gtd, smallboard[yy][xx]);
-                if (smallboard[yy][xx] != Tetromino.NoShape) {
+                TetrominoColorChanger(gtd, smallboard[yy][3-xx]);
+                if (smallboard[yy][3-xx] != Tetromino.NoShape) {
                     gtd.fillRect(startx, starty, squareSize, squareSize);
                 }
             }
         }
     }
 
+    /**
+     * Beállítja a elemet, ha nem a "könyvtári alakjában" van akkor visszaállítja
+     * @param gp
+     */
     public void setPiece(GamePiece gp) {
-        currentPiece = gp;
+        currentPiece = new GamePiece();
+        currentPiece.setShape(gp.GetShape());
         repaint();
     }
 }

@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 import com.google.gson.Gson;
@@ -164,7 +165,7 @@ public class GamePiece {
     }
 
     /**
-     * Balra fordítja a játékelemet, és ezt egy új elemeben adja vissza. Ha az elem
+     * Jobbra fordítja a játékelemet, és ezt egy új elemeben adja vissza. Ha az elem
      * négyzet, azt egyből visszadja, ahogy az eredeti játék is teszi
      * 
      * @return GamePiece - magát adja vissza
@@ -183,6 +184,12 @@ public class GamePiece {
         return result;
     }
 
+    /**
+     * Balra fordítja a játékelemet balra, és ezt egy új elemeben adja vissza. Ha az elem
+     * négyzet, azt egyből visszadja, ahogy az eredeti játék is teszi
+     *
+     * @return GamePiece - magát adja vissza
+     */
     public GamePiece rotateLeft() {
         if (this.pieceShape == Tetromino.SQShape) {
             return this;
@@ -194,6 +201,21 @@ public class GamePiece {
             result.SetX(i, -1 * GetY(i));
             result.SetY(i, GetX(i));
         }
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GamePiece gamePiece = (GamePiece) o;
+        return pieceShape == gamePiece.pieceShape;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(pieceShape);
+        result = 31 * result + Arrays.hashCode(blox);
         return result;
     }
 
