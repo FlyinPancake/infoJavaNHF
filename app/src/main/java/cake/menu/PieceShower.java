@@ -15,7 +15,7 @@ import cake.game.GamePiece.Tetromino;
  */
 public class PieceShower extends JPanel{
     private GamePiece currentPiece;
-    private int squareSize;
+    private final int squareSize;
     private HashMap<Tetromino, Color> colorDict;
 
     public PieceShower() {
@@ -27,9 +27,7 @@ public class PieceShower extends JPanel{
 
 	@Override
     protected void paintComponent(Graphics g) {
-        // TODO Auto-generated method stub
         super.paintComponent(g);
-
         drawPiece((Graphics2D) g);
     }
 
@@ -61,17 +59,13 @@ public class PieceShower extends JPanel{
      * @param t választott Tetromino
      */
     private void TetrominoColorChanger(Graphics2D gtd, Tetromino t) {
-        if (colorDict.containsKey(t)) {
-            gtd.setColor(colorDict.get(t));
-        } else {
-            gtd.setColor(Color.magenta);
-        }
+        gtd.setColor(colorDict.getOrDefault(t, Color.magenta));
 
     }
 
     /**
      * Kirajzolja az elemet
-     * @param gtd
+     * @param gtd Graphics2D
      */
     private void drawPiece(Graphics2D gtd) {
         Tetromino[][] smallboard = new Tetromino[2][4];
@@ -99,7 +93,7 @@ public class PieceShower extends JPanel{
 
     /**
      * Beállítja a elemet, ha nem a "könyvtári alakjában" van akkor visszaállítja
-     * @param gp
+     * @param gp a mutatott elem
      */
     public void setPiece(GamePiece gp) {
         currentPiece = new GamePiece();

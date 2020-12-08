@@ -11,9 +11,7 @@ import java.awt.event.ActionListener;
  * A toplista abalaka és kezelése
  */
 public class ScoreBoardWindow extends JFrame {
-    private JButton resetButton;
-    private JButton hideButton;
-    private ScoreBoard scoreBoard;
+    private final ScoreBoard scoreBoard;
     private String playername;
     public ScoreBoardWindow() {
         scoreBoard = new ScoreBoard();
@@ -24,10 +22,10 @@ public class ScoreBoardWindow extends JFrame {
         JScrollPane scrollPane = new JScrollPane(hiTable);
         this.add(scrollPane,BorderLayout.CENTER);
         JPanel southPanel = new JPanel();
-        hideButton = new JButton("Hide");
+        JButton hideButton = new JButton("Hide");
         hideButton.addActionListener(new HideButtonActionListener());
         southPanel.add(hideButton);
-        resetButton = new JButton("Reset");
+        JButton resetButton = new JButton("Reset");
         southPanel.add(resetButton);
         resetButton.addActionListener(new ResetButtonActionListener());
         this.add(southPanel,BorderLayout.SOUTH);
@@ -48,7 +46,7 @@ public class ScoreBoardWindow extends JFrame {
             name = askPlayername();
             scoreBoard.addHiScore(name.toUpperCase(), score);
 
-        } catch (ScoreNameExceedsCharLimitException e) {
+        } catch (ScoreNameWrongLength e) {
             JFrame f=new JFrame();
             JOptionPane.showMessageDialog(f,"Use at most 3 letters in your initials","Bad name",JOptionPane.WARNING_MESSAGE);
             addScore(score);
@@ -59,16 +57,17 @@ public class ScoreBoardWindow extends JFrame {
     /**
      * Bekéri a játékos monogramját, a kalsszikus játék szellemében 3 karaktert
      * @return 1-3 karakter hosszú név.
-     * @throws ScoreNameExceedsCharLimitException ha a név hosszabb mint 3 karakter kivételt dob
+     * @throws ScoreNameWrongLength ha a név hosszabb mint 3 karakter kivételt dob
      */
-    private String askPlayername() throws ScoreNameExceedsCharLimitException {
+    private String askPlayername() throws ScoreNameWrongLength {
         JFrame f=new JFrame();
         String name=JOptionPane.showInputDialog(f,"Enter Initials (3)");
         if (name == null || name.length() == 0){
             name = askPlayername();
             return name;
         } else if (name.length() >3){
-            throw new ScoreNameExceedsCharLimitException();
+
+            throw new ScoreNameWrongLength();
         } else {
             return name;
         }

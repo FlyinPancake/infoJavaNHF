@@ -21,14 +21,38 @@ import cake.menu.TetrisStatusbar;
  */
 public class TetrisScreen extends JPanel {
 
+    /**
+     * Ha egy Tetromino nem szerepel a colorDictben akkor ezt a színt használja a program
+     */
     private final Color UNKNOWNSHAPECOLOR = Color.MAGENTA;
+    /**
+     * Tetromino kulcsokkal tárolja a hozzájuk tartozó színeket.
+     */
     private HashMap<GamePiece.Tetromino, Color> colorDict;
+    /**
+     * A TetrisScreen belső TetrisBoardja
+     */
     protected TetrisBoard myTb;
 
+    /**
+     * A jéték időzítője.
+     */
     private Timer gameTimer;
+    /**
+     * A félretett elem PieceShowerje.
+     */
     private final PieceShower hold;
+    /**
+     * A következő elem PieceShowerje.
+     */
     private final PieceShower next;
+    /**
+     * A játék állapotsávja.
+     */
     private final TetrisStatusbar statusbar;
+    /**
+     * A játék főmenüje.
+     */
     private MainMenu menu;
 
     public TetrisScreen(PieceShower next, PieceShower hold, TetrisStatusbar statusbar) {
@@ -47,6 +71,10 @@ public class TetrisScreen extends JPanel {
         colorDict = ReadColorDict();
     }
 
+    /**
+     * A beolvassa a színkönyvtárat
+     * @return színkönyvtár
+     */
     private HashMap<Tetromino, Color> ReadColorDict() {
         colorDict = new HashMap<>();
         colorDict.put(Tetromino.NoShape, Color.GRAY);
@@ -106,7 +134,7 @@ public class TetrisScreen extends JPanel {
      * Befejezi a játékot és elindítja a játék vége utáni feladatokat.
      */
     public void endGame() {
-        menu.clickStartStopButton();
+        menu.gameEnded();
         statusbar.setEnded();
         gameTimer.stop();
         setHiScore(myTb.getScore());
@@ -123,7 +151,7 @@ public class TetrisScreen extends JPanel {
 
     /**
      * Elküldi a pontszámot a toplistának
-     * @param score
+     * @param score pontszám
      */
     private void setHiScore(int score) {
         menu.getScoreBoard().addScore(score);
@@ -131,28 +159,23 @@ public class TetrisScreen extends JPanel {
 
     /**
      * Megváltoztatja a Graphics2D tollszínét
-     * @param gtd
-     * @param t
+     * @param gtd Graphics2D
+     * @param t Tetromino
      */
     private void TetrominoColorChanger(Graphics2D gtd, Tetromino t) {
-        if (colorDict.containsKey(t)) {
-            gtd.setColor(colorDict.get(t));
-        } else {
-            gtd.setColor(UNKNOWNSHAPECOLOR);
-        }
+        gtd.setColor(colorDict.getOrDefault(t, UNKNOWNSHAPECOLOR));
 
     }
 
     /**
      * Kirajzolja a játékteret
-     * @param gtd
-     * @param tb
+     * @param gtd Graphics2D
+     * @param tb tetrisBoard, amit kirajzol
      */
     private void PaintTetrisBoard(Graphics2D gtd, TetrisBoard tb) {
         // GFX options
         final int PADDING = 1; // In Pixels
-        int BLOCK_SIZE = 20;
-        final int SQUARE_SIZE = BLOCK_SIZE; // In Pixels
+        final int SQUARE_SIZE = 20; // In Pixels
 
         // gtd.setBackground(Color.BLACK);
 
@@ -255,7 +278,7 @@ public class TetrisScreen extends JPanel {
     }
 
     /**
-     * @param menu
+     * @param menu A beállítja a menüt ami a screenhez tartozik
      */
     public void setMenu(MainMenu menu) {
         this.menu = menu;

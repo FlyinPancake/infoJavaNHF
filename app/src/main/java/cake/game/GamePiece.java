@@ -48,7 +48,13 @@ public class GamePiece {
      * Alosztály a setShape metódus segítségére.
      */
     private class Shape {
+        /**
+         * Az alak, amibe importáljuk a blokkalakot.
+         */
         private Tetromino type;
+        /**
+         * A blokkok koordinátája
+         */
         private int[][] blox;
 
         private Shape() {
@@ -75,7 +81,6 @@ public class GamePiece {
 
         @Override
         public String toString() {
-            // TODO Auto-generated method stub
             String cords = "";
             for (int i = 0; i < GamePiece.this.blox.length; i++) {
                 cords += "[" + blox[i][0] + "," + blox[i][1] + "] ";
@@ -90,7 +95,6 @@ public class GamePiece {
      */
     private void CreateShapesFile(File f) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File shapesFile = f;
         try {
             int[][][] shapeBlox = { { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }, // NoShape
                     { { -1, 0 }, { 0, 0 }, { 0, -1 }, { 1, -1 } }, // ZShape
@@ -105,7 +109,7 @@ public class GamePiece {
             for (int ii = 0; ii < shapeBlox.length; ii++) {
                 shapes[ii] = new Shape(Tetromino.values()[ii], shapeBlox[ii]);
             }
-            FileWriter fw = new FileWriter(shapesFile);
+            FileWriter fw = new FileWriter(f);
             fw.write(gson.toJson(shapes));
             fw.close();
 
@@ -220,23 +224,23 @@ public class GamePiece {
     }
 
     /**
-     * @param at
-     * @param val
+     * @param at blokk száma
+     * @param val blokk új értéke
      */
     private void SetX(int at, int val) {
         blox[at][0] = val;
     }
 
     /**
-     * @param at
-     * @param val
+     * @param at blokk száma
+     * @param val blokk új értéke
      */
     private void SetY(int at, int val) {
         blox[at][1] = val;
     }
 
     /**
-     * @param at
+     * @param at blokk száma
      * @return int
      */
     public int GetX(int at) {
@@ -244,7 +248,7 @@ public class GamePiece {
     }
 
     /**
-     * @param at
+     * @param at blokk száma
      * @return int
      */
     public int GetY(int at) {

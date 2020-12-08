@@ -58,8 +58,8 @@ public class ScoreBoard extends AbstractTableModel {
     /**
      * Kap egy monogramot és egy pontszámot és ha magasabb mint a legalacsonyabb pontszám,
      * hozzáadja a toplistához. Ekkor a legalacsonyabb pontszámú eredményt törli
-     * @param name
-     * @param score
+     * @param name A pontszerző neve
+     * @param score A pont
      */
     public void addHiScore(String name, int score) {
         if(scoreTable.get(scoreTable.size() - 1).getHiScore() < score) {

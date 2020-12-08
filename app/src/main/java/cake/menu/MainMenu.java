@@ -74,7 +74,19 @@ public class MainMenu extends JPanel {
             addActionListener(new StartStopActionListener());
         }
 
-        private class StartStopActionListener implements ActionListener {
+        private void switchState() {
+            if (!started) {
+                screen.requestFocus();
+                MainMenu.this.pauseResumeButton.setEnabled(true);
+                setText("Stop");
+            } else {
+                setText("Start");
+                MainMenu.this.pauseResumeButton.setEnabled(false);
+            }
+            started = !started;
+        }
+
+        public class StartStopActionListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!started) {
@@ -84,8 +96,8 @@ public class MainMenu extends JPanel {
                     setText("Stop");
                 } else {
                     setText("Start");
-                    MainMenu.this.pauseResumeButton.setEnabled(false);
                     screen.abortGame();
+                    MainMenu.this.pauseResumeButton.resetButton();
                 }
                 started = !started;
             }
@@ -104,6 +116,13 @@ public class MainMenu extends JPanel {
             addActionListener(new PauseResumeActionListener());
             setEnabled(false);
         }
+
+        private void resetButton(){
+            this.started = false;
+            setText("Pause");
+            setEnabled(false);
+        }
+
         private class PauseResumeActionListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -140,8 +159,9 @@ public class MainMenu extends JPanel {
         }
     }
 
-    public void clickStartStopButton() {
-        startStopButton.doClick();
+    public void gameEnded() {
+        startStopButton.switchState();
+        pauseResumeButton.resetButton();
     }
 
     public ScoreBoardWindow getScoreBoard() {

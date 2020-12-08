@@ -57,9 +57,9 @@ public class TetrisBoard {
     /**
      * Megadja, hogy x,y koordinátán milyen elem blokkja található.
      * Színezéshez használtam.
-     * @param x
-     * @param y
-     * @return
+     * @param x x koordináta
+     * @param y y koordináta
+     * @return Az adott X,Y-on lévő Tetromino
      */
     public GamePiece.Tetromino shapeAt(int x, int y) {
         return gameBoard[x][y];
@@ -69,8 +69,8 @@ public class TetrisBoard {
      * Az aktuális elemet próbálja mozgatni a megadott koordinátákkal.
      * Másodlagos funkciója 0,0 megadásával megállapítható, hogy az a hely ahol az elem van,
      * szabályos-e
-     * @param mvX
-     * @param mvY
+     * @param mvX mozgatás X irányba
+     * @param mvY mozgatás Y irányba
      * @return sikerült-e a mozgás
      */
     private boolean attemptMove(int mvX, int mvY) {
@@ -81,8 +81,8 @@ public class TetrisBoard {
      * Tetszőleges elemet próbálja mozgatni a megadott koordinátákkal.
      * Másodlagos funkciója 0,0 megadásával megállapítható, hogy az a hely,
      * ahol az elem van szabályos-e
-     * @param mvX
-     * @param mvY
+     * @param mvX mozgatás X irányba
+     * @param mvY mozgatás Y irányba
      * @return sikerült-e a mozgás
      */
     private boolean attemptMove(int mvX, int mvY, GamePiece gp) {
@@ -125,7 +125,7 @@ public class TetrisBoard {
 
     /**
      * index indexű sor eltávolítása, a fentebbi sorokat egyel lejjebb hozza
-     * @param index
+     * @param index Törlendő sor száma
      */
     private void removeLine(int index) {
         for (int yy = index+1; yy < TETRIS_HEIGHT; yy++) {
@@ -142,7 +142,6 @@ public class TetrisBoard {
      */
     private int removeFullLines(ArrayList<Integer> fullLines) {
         int score = 0;
-        //TODO Analize full lines
         if (fullLines.size() == 4) {
             score += 800;
         } else {
