@@ -50,3 +50,42 @@ java {
     }
 }
 
+tasks.jar{
+    manifest{
+        attributes(
+                "Implementation-Title" to "Tetris Ripoff",
+                "Main-Class" to "cake.App"
+        )
+    }
+}
+
+tasks.register<Jar>("uberJar") {
+    appendix = "uber"
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+    manifest{
+        attributes(
+                "Implementation-Title" to "Tetris Ripoff",
+                "Main-Class" to "cake.App"
+        )
+    }
+}
+
+
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Test> {
+    systemProperty("file.encoding", "UTF-8")
+}
+
+tasks.withType<Javadoc>{
+    options.encoding = "UTF-8"
+}
+
