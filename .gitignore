@@ -9,4 +9,4 @@ build
 app/shapes.json
 *.vsdx
 app/hiscores.json
-app/hiscores.json
+*.pdf
